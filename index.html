@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hotel Tommy — Budva, Montenegro</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0d1f2d;
+    --deep: #0a1720;
+    --gold: #c9a84c;
+    --gold-light: #e2c97e;
+    --cream: #f5f0e8;
+    --white: #fdfaf5;
+    --teal: #2a7a8a;
+    --teal-light: #3a9aaa;
+    --text-muted: #8a9ba8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 22px 48px;
+    background: linear-gradient(to bottom, rgba(10,23,32,0.95), transparent);
+    backdrop-filter: blur(4px);
+  }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--cream); text-decoration: none; opacity: 0.75;
+    transition: opacity 0.2s, color 0.2s;
+  }
+  .nav-links a:hover { opacity: 1; color: var(--gold-light); }
+
+  .nav-cta {
+    font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+    border: 1px solid var(--gold); color: var(--gold);
+    padding: 10px 22px; text-decoration: none;
+    transition: background 0.25s, color 0.25s;
+  }
+  .nav-cta:hover { background: var(--gold); color: var(--deep); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: grid; place-items: center;
+    position: relative; overflow: hidden;
+    background: var(--deep);
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 70% 40%, rgba(42,122,138,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 20% 70%, rgba(201,168,76,0.10) 0%, transparent 60%),
+      linear-gradient(160deg, #0a1720 0%, #0d2535 50%, #0a1f2d 100%);
+  }
+
+  /* animated wave lines */
+  .wave-lines {
+    position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+  }
+  .wave-lines svg { width: 100%; height: 100%; opacity: 0.07; }
+
+  .hero-content {
+    position: relative; text-align: center; padding: 0 24px;
+    animation: fadeUp 1.2s ease both;
+  }
+
+  .hero-tag {
+    font-size: 0.68rem; letter-spacing: 0.35em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 24px; display: block;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.2rem, 8vw, 7rem);
+    font-weight: 300; line-height: 1.0;
+    color: var(--white);
+    margin-bottom: 10px;
+  }
+  .hero-title em {
+    font-style: italic; color: var(--gold-light);
+  }
+
+  .hero-sub {
+    font-size: 0.8rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--text-muted); margin: 28px 0 44px;
+  }
+
+  .hero-sub span { color: var(--gold); margin: 0 10px; }
+
+  .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+  .btn-primary {
+    background: var(--gold); color: var(--deep);
+    padding: 14px 36px; font-size: 0.72rem;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    text-decoration: none; font-weight: 500;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+  .btn-outline {
+    border: 1px solid rgba(255,255,255,0.3); color: var(--white);
+    padding: 14px 36px; font-size: 0.72rem;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+  .scroll-hint {
+    position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--text-muted); animation: bounce 2s infinite;
+  }
+  .scroll-hint::after {
+    content: ''; width: 1px; height: 40px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+  }
+
+  /* ── STRIP ── */
+  .strip {
+    background: var(--gold); color: var(--deep);
+    padding: 14px 0; overflow: hidden;
+  }
+  .strip-inner {
+    display: flex; gap: 60px; width: max-content;
+    animation: ticker 20s linear infinite;
+    font-size: 0.68rem; letter-spacing: 0.3em; text-transform: uppercase; font-weight: 500;
+  }
+
+  /* ── ABOUT ── */
+  #about {
+    padding: 120px 48px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+    max-width: 1200px; margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 0.65rem; letter-spacing: 0.35em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 20px; display: block;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 4vw, 3.6rem);
+    font-weight: 300; line-height: 1.15;
+    color: var(--white); margin-bottom: 28px;
+  }
+  .section-title em { font-style: italic; color: var(--gold-light); }
+
+  .section-body {
+    font-size: 0.9rem; line-height: 1.9; color: #9ab3c2;
+    margin-bottom: 36px;
+  }
+
+  .about-stats {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+  }
+  .stat {
+    border-left: 2px solid var(--gold); padding-left: 18px;
+  }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.4rem; font-weight: 300; color: var(--gold-light);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--text-muted); margin-top: 4px;
+  }
+
+  .about-image-wrap {
+    position: relative;
+  }
+  .about-img-mock {
+    width: 100%; aspect-ratio: 4/5;
+    background: linear-gradient(135deg, #1a3a4a 0%, #0d2535 40%, #1a4a3a 100%);
+    position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .about-img-mock::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(circle at 30% 40%, rgba(42,122,138,0.3) 0%, transparent 50%),
+      radial-gradient(circle at 75% 70%, rgba(201,168,76,0.15) 0%, transparent 45%);
+  }
+  .about-img-inner {
+    position: relative; text-align: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem; letter-spacing: 0.15em; color: var(--gold);
+    opacity: 0.7;
+  }
+  .about-badge {
+    position: absolute; bottom: -20px; right: -20px;
+    width: 110px; height: 110px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    color: var(--deep);
+  }
+  .badge-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem; font-weight: 600; line-height: 1;
+  }
+  .badge-text {
+    font-size: 0.58rem; letter-spacing: 0.15em; text-transform: uppercase;
+    text-align: center; font-weight: 500;
+  }
+
+  /* ── ROOMS ── */
+  #rooms {
+    padding: 100px 48px;
+    background: linear-gradient(180deg, var(--navy) 0%, #0a1f2e 100%);
+  }
+  .rooms-header {
+    text-align: center; max-width: 600px; margin: 0 auto 72px;
+  }
+
+  .rooms-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+    max-width: 1200px; margin: 0 auto;
+  }
+
+  .room-card {
+    position: relative; overflow: hidden; cursor: pointer;
+    aspect-ratio: 3/4;
+    background: #0d2535;
+  }
+  .room-card:first-child { grid-row: span 2; aspect-ratio: auto; }
+
+  .room-mock-img {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.6s ease;
+  }
+  .room-card:nth-child(1) .room-mock-img {
+    background: linear-gradient(135deg, #0d2a3a 0%, #1a4a5a 60%, #0d3040 100%);
+  }
+  .room-card:nth-child(2) .room-mock-img {
+    background: linear-gradient(135deg, #1a3530 0%, #0d2525 100%);
+  }
+  .room-card:nth-child(3) .room-mock-img {
+    background: linear-gradient(135deg, #2a1a0d 0%, #1a2a0d 100%);
+  }
+  .room-card:nth-child(4) .room-mock-img {
+    background: linear-gradient(135deg, #1a0d2a 0%, #0d1a3a 100%);
+  }
+
+  .room-card:hover .room-mock-img { transform: scale(1.05); }
+
+  .room-img-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem; color: rgba(255,255,255,0.3); letter-spacing: 0.1em;
+  }
+
+  .room-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(10,23,32,0.92) 0%, transparent 55%);
+    padding: 28px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    transition: background 0.3s;
+  }
+  .room-card:hover .room-overlay {
+    background: linear-gradient(to top, rgba(10,23,32,0.96) 0%, rgba(10,23,32,0.2) 100%);
+  }
+
+  .room-type {
+    font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 6px;
+  }
+  .room-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem; color: var(--white); margin-bottom: 8px;
+  }
+  .room-card:first-child .room-name { font-size: 2rem; }
+  .room-details {
+    font-size: 0.72rem; color: var(--text-muted); letter-spacing: 0.1em;
+    opacity: 0; transform: translateY(8px);
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  .room-card:hover .room-details { opacity: 1; transform: translateY(0); }
+
+  /* ── AMENITIES ── */
+  #amenities {
+    padding: 100px 48px;
+  }
+  .amenities-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 2fr; gap: 80px; align-items: start;
+  }
+
+  .amenities-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+  }
+  .amenity {
+    padding: 32px 28px;
+    border: 1px solid rgba(255,255,255,0.05);
+    transition: background 0.25s, border-color 0.25s;
+    cursor: default;
+  }
+  .amenity:hover {
+    background: rgba(201,168,76,0.04);
+    border-color: rgba(201,168,76,0.2);
+  }
+  .amenity-icon {
+    font-size: 1.6rem; margin-bottom: 14px;
+  }
+  .amenity-name {
+    font-size: 0.85rem; color: var(--white); margin-bottom: 6px;
+    font-weight: 400; letter-spacing: 0.05em;
+  }
+  .amenity-desc {
+    font-size: 0.75rem; color: var(--text-muted); line-height: 1.6;
+  }
+
+  /* ── BREAKFAST ── */
+  #breakfast {
+    background: var(--cream); color: var(--navy);
+    padding: 100px 48px;
+  }
+  .breakfast-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+  }
+  #breakfast .section-label { color: var(--teal); }
+  #breakfast .section-title { color: var(--navy); }
+  #breakfast .section-title em { color: var(--teal); }
+  #breakfast .section-body { color: #4a6070; }
+
+  .breakfast-items {
+    display: flex; flex-direction: column; gap: 0;
+  }
+  .bitem {
+    display: flex; align-items: center; gap: 20px;
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(10,23,32,0.1);
+  }
+  .bitem-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--teal); flex-shrink: 0;
+  }
+  .bitem-text {
+    font-size: 0.88rem; color: #3a5060;
+  }
+
+  .breakfast-visual {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  }
+  .bv-block {
+    aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+    font-size: 2rem;
+    border-radius: 2px;
+  }
+  .bv-block:nth-child(1) { background: #e8d5a0; grid-column: span 2; aspect-ratio: 2/1; font-size: 3rem; }
+  .bv-block:nth-child(2) { background: #c5d8c0; }
+  .bv-block:nth-child(3) { background: #d4c0a0; }
+
+  /* ── LOCATION ── */
+  #location {
+    padding: 100px 48px;
+    background: linear-gradient(180deg, #0a1f2e 0%, var(--deep) 100%);
+  }
+  .location-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+  }
+
+  .map-mock {
+    aspect-ratio: 4/3;
+    background:
+      linear-gradient(135deg, #0f2535 0%, #1a3a4a 40%, #0d2535 100%);
+    position: relative; overflow: hidden;
+    border: 1px solid rgba(201,168,76,0.15);
+  }
+
+  .map-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(42,122,138,0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(42,122,138,0.08) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .map-pin {
+    position: absolute; top: 48%; left: 52%; transform: translate(-50%, -50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0;
+  }
+  .map-pin-dot {
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--gold); box-shadow: 0 0 0 6px rgba(201,168,76,0.25),
+                                          0 0 0 12px rgba(201,168,76,0.10);
+    animation: pulse 2s infinite;
+  }
+  .map-pin-line { width: 2px; height: 30px; background: var(--gold); }
+  .map-pin-label {
+    background: var(--gold); color: var(--deep);
+    font-size: 0.65rem; font-weight: 500; letter-spacing: 0.1em;
+    padding: 5px 10px; white-space: nowrap;
+  }
+
+  .location-details { display: flex; flex-direction: column; gap: 28px; }
+  .loc-item { display: flex; gap: 20px; align-items: flex-start; }
+  .loc-icon {
+    width: 44px; height: 44px; border: 1px solid rgba(201,168,76,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; flex-shrink: 0; color: var(--gold);
+  }
+  .loc-label {
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 5px;
+  }
+  .loc-value { font-size: 0.9rem; color: #9ab3c2; line-height: 1.5; }
+
+  /* ── CTA ── */
+  #cta {
+    padding: 120px 48px;
+    text-align: center;
+    background: linear-gradient(135deg, #0a1720 0%, #0d2535 50%, #0a1720 100%);
+    position: relative; overflow: hidden;
+  }
+  #cta::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(201,168,76,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cta-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 300; color: var(--white); margin-bottom: 20px;
+  }
+  .cta-title em { font-style: italic; color: var(--gold-light); }
+  .cta-sub {
+    font-size: 0.85rem; color: var(--text-muted); margin-bottom: 48px;
+    letter-spacing: 0.05em; line-height: 1.8;
+  }
+  .cta-contact {
+    display: flex; justify-content: center; gap: 48px; flex-wrap: wrap;
+    margin-top: 48px;
+  }
+  .contact-item {
+    display: flex; flex-direction: column; gap: 6px; align-items: center;
+  }
+  .contact-label {
+    font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--gold);
+  }
+  .contact-value {
+    font-size: 0.9rem; color: var(--cream);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--deep); padding: 40px 48px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem; letter-spacing: 0.15em;
+    color: var(--gold); text-transform: uppercase;
+  }
+  .footer-copy {
+    font-size: 0.68rem; color: var(--text-muted); letter-spacing: 0.1em;
+  }
+  .footer-social { display: flex; gap: 20px; }
+  .footer-social a {
+    font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--text-muted); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-social a:hover { color: var(--gold); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(6px); }
+  }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 6px rgba(201,168,76,0.25), 0 0 0 12px rgba(201,168,76,0.10); }
+    50% { box-shadow: 0 0 0 10px rgba(201,168,76,0.15), 0 0 0 20px rgba(201,168,76,0.05); }
+  }
+
+  .reveal {
+    opacity: 0; transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 18px 24px; }
+    .nav-links { display: none; }
+    #about, .amenities-inner, .breakfast-inner, .location-inner { grid-template-columns: 1fr; gap: 48px; }
+    #about { padding: 80px 24px; }
+    #rooms { padding: 80px 24px; }
+    #amenities { padding: 80px 24px; }
+    #breakfast { padding: 80px 24px; }
+    #location { padding: 80px 24px; }
+    #cta { padding: 80px 24px; }
+    .rooms-grid { grid-template-columns: 1fr 1fr; }
+    .room-card:first-child { grid-row: span 1; }
+    footer { flex-direction: column; gap: 16px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">Hotel Tommy</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#rooms">Rooms</a></li>
+    <li><a href="#amenities">Amenities</a></li>
+    <li><a href="#breakfast">Breakfast</a></li>
+    <li><a href="#location">Location</a></li>
+  </ul>
+  <a class="nav-cta" href="#cta">Book Now</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="wave-lines">
+    <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
+      <path d="M0 300 Q360 250 720 300 T1440 300" fill="none" stroke="white" stroke-width="1"/>
+      <path d="M0 350 Q360 300 720 350 T1440 350" fill="none" stroke="white" stroke-width="0.5"/>
+      <path d="M0 400 Q360 350 720 400 T1440 400" fill="none" stroke="white" stroke-width="1"/>
+      <path d="M0 450 Q360 400 720 450 T1440 450" fill="none" stroke="white" stroke-width="0.5"/>
+      <path d="M0 500 Q360 450 720 500 T1440 500" fill="none" stroke="white" stroke-width="1"/>
+      <line x1="200" y1="0" x2="200" y2="900" stroke="white" stroke-width="0.3"/>
+      <line x1="600" y1="0" x2="600" y2="900" stroke="white" stroke-width="0.3"/>
+      <line x1="1000" y1="0" x2="1000" y2="900" stroke="white" stroke-width="0.3"/>
+    </svg>
+  </div>
+
+  <div class="hero-content">
+    <span class="hero-tag">✦ Budva, Montenegro ✦</span>
+    <h1 class="hero-title">
+      Hotel<br><em>Tommy</em>
+    </h1>
+    <p class="hero-sub">
+      Comfort <span>◆</span> Style <span>◆</span> Breakfast
+    </p>
+    <div class="hero-buttons">
+      <a href="#cta" class="btn-primary">Reserve a Room</a>
+      <a href="#about" class="btn-outline">Discover More</a>
+    </div>
+  </div>
+
+  <div class="scroll-hint">Scroll</div>
+</section>
+
+<!-- TICKER STRIP -->
+<div class="strip">
+  <div class="strip-inner">
+    <span>✦ Elegant Stay in the Heart of Budva</span>
+    <span>✦ Continental Breakfast Included</span>
+    <span>✦ Sea Views Available</span>
+    <span>✦ Budva Old Town — 5 Min Walk</span>
+    <span>✦ Free Wi-Fi</span>
+    <span>✦ Air Conditioning</span>
+    <span>✦ Elegant Stay in the Heart of Budva</span>
+    <span>✦ Continental Breakfast Included</span>
+    <span>✦ Sea Views Available</span>
+    <span>✦ Budva Old Town — 5 Min Walk</span>
+    <span>✦ Free Wi-Fi</span>
+    <span>✦ Air Conditioning</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="reveal">
+    <span class="section-label">Our Story</span>
+    <h2 class="section-title">A Refined Retreat<br>in the <em>Heart of Budva</em></h2>
+    <p class="section-body">
+      Nestled in the vibrant city of Budva, Montenegro, Hotel Tommy offers a warm and elegant escape on the stunning Adriatic coast. Our carefully designed rooms 
